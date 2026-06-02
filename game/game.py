@@ -65,7 +65,7 @@ def intro():
         return player, rounds_count
 
 
-player, round_counts = intro()
+player, rounds_count = intro()
 
 
 #creating bot opponent
@@ -74,7 +74,7 @@ bot = Computer()
 
 #            temporary player data (DELETE this block)       
 player = Player('Nana')
-round_counts = 5
+rounds_count = 5
 #                                                            
 
 
@@ -106,3 +106,33 @@ def bot_moves():
     bot_round_score = bot.roll()
     print(f"Computer scored {bot_round_score}")
     return bot_round_score
+
+
+#definig round and game scenario
+
+round_number = Round_Counter()
+
+def play_round():
+    while True:
+        print(f"Round {round_number._value}     started")
+        player_round_score = player_moves()
+        bot_round_score = bot_moves()
+        round_score = count_round_score (player_round_score, bot_round_score)
+        if round_score == 0:
+            print("Oops... Can't be equal. Always must be a winner. Play the same round again!")
+            continue
+        return round_score
+
+
+def game():
+    while round_number._value <= rounds_count:
+        round_score = play_round()
+        save_score(player, round_score)
+        print(f'''Round {round_number._value} finished
+----------------------------------''')
+        round_number.increase_round_number()
+
+
+game()
+
+print(f"{player.name}'s final score of the game is {player._score}")
