@@ -1,8 +1,3 @@
-# save_result(name, rounds, score): сохранение нового результата в game_results.json.
-
-# get_results(): чтение всех результатов из файла и вывод в консоль.
-#final score valuation
-
 import json
 
 
@@ -40,10 +35,9 @@ def save_results(date, player,rounds_count):
     add_results(results, date, player,rounds_count)
 
 
-def show_results():
+def get_results():
     results = open_results()
     for x in results:
         for a in x:
             print(f"{a}: {x[a]}")
         print('-------------------')
-
