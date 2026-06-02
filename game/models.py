@@ -22,7 +22,7 @@ class Computer(General_Player):
 
 class Round_Counter:
     def __init__(self):
-        self._value = 0
+        self._value = 1
 
     def increase_round_number(self):
         self._value += 1

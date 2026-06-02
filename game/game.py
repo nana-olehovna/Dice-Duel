@@ -1,7 +1,9 @@
-from models import Player, Computer, Round_Counter
-from exceptions import InvalidInputError, InvalidRollError
-from settings import GAME_LEVELS, GAME_LEVELS_CONVERT
-from score import count_round_score, save_score
+from datetime import datetime
+
+from .models import Player, Computer, Round_Counter
+from .exceptions import InvalidInputError, InvalidRollError
+from .settings import GAME_LEVELS, GAME_LEVELS_CONVERT
+from .score import count_round_score, save_score, save_results, show_results
 
 # create a player
 def get_name():
@@ -65,16 +67,16 @@ def intro():
         return player, rounds_count
 
 
-player, rounds_count = intro()
+# player, rounds_count = intro()
 
 
 #creating bot opponent
-bot = Computer()
+# bot = Computer()
 
 
 #            temporary player data (DELETE this block)       
-player = Player('Nana')
-rounds_count = 5
+# player = Player('Nana')
+# rounds_count = 5
 #                                                            
 
 
@@ -94,7 +96,7 @@ def roll_is_valid():
         except InvalidRollError as e:
             print(e)
 
-def player_moves():
+def player_moves(player):
     roll_is_valid()
     if roll_is_valid:
         player_round_score = player.roll()
@@ -102,21 +104,26 @@ def player_moves():
         return player_round_score
 #   else what????
 
-def bot_moves():
+def bot_moves(bot):
     bot_round_score = bot.roll()
     print(f"Computer scored {bot_round_score}")
     return bot_round_score
 
 
+#saving date and time of game
+def fetch_date():
+    date = datetime.now()
+    return date.strftime("%Y-%m-%d %H:%M:%S")
+
 #definig round and game scenario
 
-round_number = Round_Counter()
+# round_number = Round_Counter()
 
-def play_round():
+def play_round(round_number, player, bot):
     while True:
-        print(f"Round {round_number._value}     started")
-        player_round_score = player_moves()
-        bot_round_score = bot_moves()
+        print(f"Round {round_number._value} started")
+        player_round_score = player_moves(player)
+        bot_round_score = bot_moves(bot)
         round_score = count_round_score (player_round_score, bot_round_score)
         if round_score == 0:
             print("Oops... Can't be equal. Always must be a winner. Play the same round again!")
@@ -124,15 +131,24 @@ def play_round():
         return round_score
 
 
-def game():
+def play_rounds_loop(player, round_number, rounds_count, bot):
     while round_number._value <= rounds_count:
-        round_score = play_round()
+        round_score = play_round(round_number, player, bot)
         save_score(player, round_score)
         print(f'''Round {round_number._value} finished
 ----------------------------------''')
         round_number.increase_round_number()
 
 
-game()
+def play_game():
+    player, rounds_count = intro()
+    bot = Computer()
+    round_number = Round_Counter()
+    play_rounds_loop(player, round_number, rounds_count, bot)
+    print(f"{player.name}'s final score of the game is {player._score}")
+    date = fetch_date()
+    return date, player, rounds_count
 
-print(f"{player.name}'s final score of the game is {player._score}")
+
+
+
