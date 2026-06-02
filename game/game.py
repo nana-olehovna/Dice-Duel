@@ -1,6 +1,7 @@
 from models import Player, Computer, Round_Counter
 from exceptions import InvalidInputError, InvalidRollError
 from settings import GAME_LEVELS, GAME_LEVELS_CONVERT
+from score import count_round_score, save_score
 
 # create a player
 def get_name():
@@ -62,3 +63,46 @@ def intro():
         rounds_count, lvl_name = convert_lvl(game_lvl)
         show_lvl_info(rounds_count, lvl_name)
         return player, rounds_count
+
+
+player, round_counts = intro()
+
+
+#creating bot opponent
+bot = Computer()
+
+
+#            temporary player data (DELETE this block)       
+player = Player('Nana')
+round_counts = 5
+#                                                            
+
+
+
+#       GAME PROCESS
+
+
+#definition and validation of moves
+
+def roll_is_valid():
+    while True:
+        try:
+            move_input = input('Roll the cube: (Press "Enter")')
+            if move_input.strip() != "":
+                raise InvalidRollError('Error: move was not make. Try again')
+            return True
+        except InvalidRollError as e:
+            print(e)
+
+def player_moves():
+    roll_is_valid()
+    if roll_is_valid:
+        player_round_score = player.roll()
+        print(f"You scored {player_round_score}")
+        return player_round_score
+#   else what????
+
+def bot_moves():
+    bot_round_score = bot.roll()
+    print(f"Computer scored {bot_round_score}")
+    return bot_round_score
