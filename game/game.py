@@ -102,11 +102,25 @@ def play_rounds_loop(player, round_number, rounds_count, bot):
         round_number.increase_round_number()
 
 
+def valuate_game_result(player):
+    if player._score > 0:
+        print("You are the WINNER!")
+        if player._score > 6:
+            print("WOW. That's what I call a Good Luck")
+    elif player._score == 0:
+        print("It's a draw. I offer you play again, just for clarity)))")
+    else:
+        print("Sorry. You lost this game")
+        if player._score < -6:
+            print("Oh... It's not your day, mate.")
+
+
 def play_game():
     player, rounds_count = intro()
     bot = Computer()
     round_number = Round_Counter()
     play_rounds_loop(player, round_number, rounds_count, bot)
     print(f"{player.name}'s final score of the game is {player._score}")
+    valuate_game_result(player)
     date = fetch_date()
     return date, player, rounds_count
